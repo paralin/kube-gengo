@@ -283,9 +283,11 @@ func Packages(context *generator.Context, arguments *args.GeneratorArgs) generat
 		}
 		if len(inputTags) == 1 {
 			var err error
-			typesPkg, err = context.AddDirectory(filepath.Join(pkg.Path, inputTags[0]))
+			// CJS: Let's just let Go resolve the import path.
+			// typesPkg, err = context.AddDirectory(filepath.Join(pkg.Path, inputTags[0]))
+			typesPkg, err = context.AddDirectory(inputTags[0])
 			if err != nil {
-				klog.Fatalf("cannot import package %s", inputTags[0])
+				klog.Fatalf("cannot import package at %s with tag %s: %v", pkg.Path, inputTags[0], err.Error())
 			}
 			// update context.Order to the latest context.Universe
 			orderer := namer.Orderer{Namer: namer.NewPublicNamer(1)}
